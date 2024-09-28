@@ -6,14 +6,15 @@ import { BsSearch } from "react-icons/bs";
 import { BiCart } from "react-icons/bi";
 import LowerHeader from './LowerHeader';
 import { DataContext } from '../DataProvider/DataProvider';
+import { auth } from '../../Utility/firebase';
 
 
 function Header() {
-    const [{ basket }, dispatch] = useContext(DataContext);
+    const [{ user, basket }, dispatch] = useContext(DataContext);
     const totalItem = basket?.reduce((amount, item) => {
       return item.amount + amount;
     }, 0);
-// calculate the total amount of items in a basket using the reduce method. 
+// calculate the total amount of items in a basket using the reduce method. (prev, current)
 
   return (
     <section className={classes.fixed}>
@@ -43,7 +44,7 @@ function Header() {
             <option value="">All</option>
           </select>
           <input type="text" name="" id="" placeholder="search product" />
-          <BsSearch size={25} />
+          <BsSearch size={38} />
         </div>
 
         {/* right side link */}
@@ -58,10 +59,19 @@ function Header() {
             </select>
           </Link>
           {/* three components */}
-          <Link to="/auth">
+          <Link to={!user && "/auth"}>
             <div>
-              <p>Sign In</p>
-              <span>Account & Lists</span>
+              {user ? (
+              <>
+                <p>Hello {user?.email?.split("@")[0]}</p>
+                <span onClick={()=> auth.signOut()}>Sign Out</span>
+              </>
+              ) : (
+                <>
+                <p>Hello, Sign In</p>
+                <span>Account & Lists</span>
+                </>
+              )}
             </div>
           </Link>
           {/* orders */}

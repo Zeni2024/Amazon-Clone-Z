@@ -4,13 +4,13 @@ import CurrencyFormat from "../CurrencyFormat/CurrencyFormat";
 import classes from "./Product.module.css";
 import { Link } from "react-router-dom";
 import { DataContext } from "../DataProvider/DataProvider";
-import { Type } from "../../Utility/action.type";
+import { Type } from "../../Utility/actiontype";
 
 function ProductCard({ product, flex, renderDesc, renderAdd }) {
   const { image, title, id, rating, price, description } = product;
 
   const [state, dispatch] = useContext(DataContext);
-  console.log(state);
+  // console.log(state);
 
   const handleAddToCart = () => {
     // console.log("hi");
@@ -19,8 +19,6 @@ function ProductCard({ product, flex, renderDesc, renderAdd }) {
       item: { image, title, id, rating, price, description },
     });
   };
-
- 
 
   return (
     <div

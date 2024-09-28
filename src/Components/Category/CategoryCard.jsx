@@ -17,4 +17,4 @@ function CategoryCard({data}) {
   );
 }
 
-export default CategoryCard
+export default CategoryCard;

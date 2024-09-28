@@ -1,11 +1,84 @@
-import React from 'react'
+import React, {useContext, useState, useEffect}from 'react'
 import classes from './orders.module.css'
 import Layout from '../../Components/Layout/Layout'
+import { db } from '../../Utility/firebase';
+import { DataContext } from '../../Components/DataProvider/DataProvider';
+import ProductCard from "../../Components/Product/ProductCard"
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+
 
 function Orders() {
+
+  const [{user}, dispatch] =useContext(DataContext)
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    
+    (
+      async () => {
+        if (user) {
+          //   db.collection("users").doc(user.uid).collection("orders").orderBy("created", "desc").onSnapshot((snapshot)=> {
+          //   console.log(snapshot)
+          //   setOrders(
+          //     snapshot.docs.map((doc)=> ({
+          //       id: doc.id,
+          //       data: doc.data(),
+          //     }))
+          //   )
+          // })
+          const ordersRef = collection(db, "users", user.uid, "orders");
+          const q = query(ordersRef, orderBy("created", "desc"));
+          // Fetch all the documents matching the query
+          const querySnapshot = await getDocs(q);
+          const ordersList = querySnapshot.docs;
+          setOrders(
+            ordersList.map((doc) => ({ id: doc?.id, data: doc?.data() }))
+          );
+          
+        } else {
+          setOrders([]);
+        }
+      }
+    )()
+    
+   
+  }, []);
+
   return (
     <Layout>
-      <div>Orders</div>
+      <section className={classes.container}>
+        <div className={classes.orders_container}>
+          <h2>Your orders</h2>
+          {orders?.length == 0 && <div style={{padding: "20px"}}>
+            You don't have orders yet!
+          </div>}
+            {/* ordered items */}
+          <div>
+            {
+              orders?.map((eachOrder, i)=>{
+
+                return (
+                  <div key={i}>
+                    <hr />
+                    <p>Order ID: {eachOrder?.id}</p>
+                    {
+                      eachOrder?.data?.basket?.map((order) => (
+                        
+                        <ProductCard 
+                        flex={true}
+                        product={order}
+                        key={order.id}
+                        />
+                      ))
+                    }
+                  </div>
+                )
+
+              })
+            }
+          </div>
+        </div>
+      </section>
     </Layout>
   );
 }

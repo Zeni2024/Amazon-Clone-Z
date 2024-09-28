@@ -1,7 +1,8 @@
-import { Type } from "./action.type";
+import { Type } from "./actiontype";
 
 export const initialState = {
   basket: [],
+  user: null,
 };
 
 export const reducer = (state, action) => {
@@ -13,7 +14,7 @@ export const reducer = (state, action) => {
       );
       if (!existingItem) {
         return {
-          ...state,
+          ...state, // retain the current state of the app.
           basket: [...state.basket, { ...action.item, amount: 1 }],
         };
       } else {
@@ -37,19 +38,29 @@ export const reducer = (state, action) => {
         if (newBasket[index].amount > 1) {
           newBasket[index] = {
             ...newBasket[index],
-            amount:newBasket[index].amount - 1,
+            amount: newBasket[index].amount - 1,
           };
         } else {
-          newBasket.splice(index, 1)
+          newBasket.splice(index, 1);
         }
       }
       return {
         ...state,
         basket: newBasket,
       };
+    case Type.EMPTY_BASKET:
+      return {
+        ...state,
+        basket: [],
+      };
+
+    case Type.SET_USER:
+      return {
+        ...state,
+        user: action.user,
+      };
+
     default:
       return state;
   }
 };
-
-
