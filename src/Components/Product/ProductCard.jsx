@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
-import Rating from "@mui/material/rating";
+// import Rating from "@mui/material/rating";
+import StarRatings from "react-star-ratings";
 import CurrencyFormat from "../CurrencyFormat/CurrencyFormat";
 import classes from "./Product.module.css";
 import { Link } from "react-router-dom";
@@ -35,7 +36,15 @@ function ProductCard({ product, flex, renderDesc, renderAdd }) {
         {renderDesc && <div style={{ maxWidth: "750px" }}>{description}</div>}
         <div className={classes.rating}>
           {/* rating */}
-          <Rating readOnly value={rating?.rate} precision={0.1} />
+          <StarRatings
+            rating={rating?.rate}
+            starRatedColor="gold"
+            starDimension="20px"
+            starSpacing="2px"
+            numberOfStars={5}
+            name="rating"
+            editing={false}
+          />
           {/* count*/}
           <small>{rating?.count}</small>
         </div>
