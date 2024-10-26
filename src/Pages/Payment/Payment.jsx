@@ -54,8 +54,9 @@ function Payment() {
           card: elements.getElement(CardElement),
         },
       });
-      // console.log(paymentIntent);
+      console.log(paymentIntent);
       //3 after confirmation ==>save our order firestore db and clear the basket
+      // console.log(db);
       // await db
       //   .collection("users")
       //   .doc(user.uid)
@@ -71,7 +72,7 @@ function Payment() {
         amount: paymentIntent.amount, // amount in cents
         created: paymentIntent.created, // timestamp
       });
-
+      console.log("test");
       // empty the basket
       dispatch({ type: Type.EMPTY_BASKET });
 
